@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.androiddev2025.Main_page_frag"
+        android:label="Registr" >
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_registrFragment"
+            app:destination="@id/registrFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.androiddev2025.LogIn_page_frag"
+        android:label="Login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registrFragment"
+            app:destination="@id/registrFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrFragment"
+        android:name="com.example.androiddev2025.Registr_page_frag"
+        android:label="Registr" >
+        <action
+            android:id="@+id/action_registrFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/action_registrFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+
+</navigation>
