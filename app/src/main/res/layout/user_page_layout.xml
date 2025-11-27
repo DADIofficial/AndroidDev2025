@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/UserInfoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <LinearLayout
+            android:id="@+id/UserNameBlock"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp">
+
+            <TextView
+                android:id="@+id/UserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="10dp"
+                android:text="UserName"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/NameChangeButton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Change"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/UserEmailBlock"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/UserEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="10dp"
+                android:text="UserEmail"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/EmailChangeButton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Change"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/UserPasswordBlock"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/UserPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="10dp"
+                android:text="UserPassword"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/PasswordChangeButton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Change"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/UserBalanceBlock"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/UserBalance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="10dp"
+                android:text="UserBalance"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/BalanceChangeButton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Change"
+                android:textSize="10sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

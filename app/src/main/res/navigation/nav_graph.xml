@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.androiddev2025.Main_page_frag"
+        android:name="com.example.androiddev2025.MainPageFrag"
         android:label="Registr" >
         <action
             android:id="@+id/action_mainFragment_to_loginFragment"
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.androiddev2025.LogIn_page_frag"
+        android:name="com.example.androiddev2025.LogInPageFrag"
         android:label="Login" >
         <action
             android:id="@+id/action_loginFragment_to_registrFragment"
@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/registrFragment"
-        android:name="com.example.androiddev2025.Registr_page_frag"
+        android:name="com.example.androiddev2025.RegistrPageFrag"
         android:label="Registr" >
         <action
             android:id="@+id/action_registrFragment_to_loginFragment"

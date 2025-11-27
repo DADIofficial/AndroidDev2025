@@ -1,44 +1,44 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "4da3b0cf7399c01cb1e938eb0e6cc116",
+    "version": 2,
+    "identityHash": "206c110d5cac81e60c97379546b67bc8",
     "entities": [
       {
         "tableName": "user",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `Name` TEXT NOT NULL, `Email` TEXT NOT NULL, `Password` TEXT NOT NULL, `Balance` REAL NOT NULL, `Admin` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ID` INTEGER PRIMARY KEY AUTOINCREMENT, `Name` TEXT NOT NULL, `Email` TEXT NOT NULL, `Password` TEXT NOT NULL, `Balance` REAL NOT NULL, `Admin` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "ID",
+            "columnName": "ID",
             "affinity": "INTEGER"
           },
           {
-            "fieldPath": "name",
+            "fieldPath": "Name",
             "columnName": "Name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "email",
+            "fieldPath": "Email",
             "columnName": "Email",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "password",
+            "fieldPath": "Password",
             "columnName": "Password",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "balance",
+            "fieldPath": "Balance",
             "columnName": "Balance",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "admin",
+            "fieldPath": "Admin",
             "columnName": "Admin",
             "affinity": "INTEGER",
             "notNull": true
@@ -47,14 +47,14 @@
         "primaryKey": {
           "autoGenerate": true,
           "columnNames": [
-            "id"
+            "ID"
           ]
         }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4da3b0cf7399c01cb1e938eb0e6cc116')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '206c110d5cac81e60c97379546b67bc8')"
     ]
   }
 }

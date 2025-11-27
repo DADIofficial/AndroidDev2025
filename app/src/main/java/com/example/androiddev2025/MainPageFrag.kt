@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
-class Main_page_frag: Fragment(){
+class MainPageFrag: Fragment(){
 
     override fun onCreateView(
         inflater: LayoutInflater,

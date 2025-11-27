@@ -7,13 +7,16 @@ import androidx.room.PrimaryKey
 @Entity (tableName = "user")
 data class Users(
     @PrimaryKey(autoGenerate = true)
-    var ID: Int? = null,
+    var id: Int? = null,
     @ColumnInfo(name = "Name")
-    var Name: String,
+    var name: String,
     @ColumnInfo(name = "Email")
-    var Email: String,
+    var email: String,
     @ColumnInfo(name = "Password")
-    var Password: String,
+    var password: String,
     @ColumnInfo(name = "Balance")
-    var Balance: Float,
+    var balance: Float,
+    @ColumnInfo(name = "Admin")
+    var admin: Boolean,
+
 )
