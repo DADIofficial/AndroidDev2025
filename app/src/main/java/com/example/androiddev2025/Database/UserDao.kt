@@ -3,6 +3,7 @@ package com.example.androiddev2025.Database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 
@@ -16,5 +17,16 @@ interface UserDao {
     fun getAllUsers(): Flow<List<Users>>
 
     @Query("DELETE FROM user")
-    fun deleteAllUsers()
+    suspend fun deleteAllUsers()
+
+
+    @Query("SELECT * FROM user")
+    suspend fun getAllUsersOnce(): List<Users>
+
+    @Insert
+    suspend fun insertAll(list: List<Users>)
+
+//    @Update
+//    suspend fun updateUser(user: Users)
+
 }
