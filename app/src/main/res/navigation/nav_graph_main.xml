@@ -1,12 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/GameFragment">
+    app:startDestination="@id/singleGameFragment">
 
     <fragment
-        android:id="@+id/GameFragment"
-        android:name="com.example.androiddev2025.dadibranch.fragments.ListofGame"
-        android:label="Game"/>
+        android:id="@+id/singleGameFragment"
+        android:name="com.example.androiddev2025.dadibranch.fragments.SingleGame"
+        android:label="Single" />
 
+    <fragment
+        android:id="@+id/multipleGameFragment"
+        android:name="com.example.androiddev2025.dadibranch.fragments.MultipleGame"
+        android:label="Multiple" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.androiddev2025.dadibranch.fragments.SettingsFragment"
+        android:label="Settings" />
 
 </navigation>
