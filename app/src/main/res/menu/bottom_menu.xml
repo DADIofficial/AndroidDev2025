@@ -2,15 +2,20 @@
 <!--    <item android:id="@+id/homeFragment" android:title="Home" android:icon="@drawable/ic_home"/>-->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/singleGameFragment"
-        android:title="Single" />
+        android:icon="@drawable/ic_single_24"
+        android:title="@string/nav_single" />
 
     <item
         android:id="@+id/multipleGameFragment"
-        android:title="Multiple" />
+        android:icon="@drawable/ic_group_24"
+        android:title="@string/nav_multiple" />
 
     <item
         android:id="@+id/settingsFragment"
-        android:title="Settings" />
+        android:icon="@drawable/ic_settings_24"
+        android:title="@string/nav_settings" />
+
 </menu>

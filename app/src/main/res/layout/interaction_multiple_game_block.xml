@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="22dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/card_stroke">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/game_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/join_button"
+            tools:text="Name of game" />
+
+        <!-- Join button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/join_button"
+            style="@style/Widget.App.PlayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:minWidth="110dp"
+            android:text="@string/join"
+            app:icon="@drawable/ic_play_24"
+            app:iconPadding="8dp"
+            app:iconGravity="textStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Join" />
+
+        <!-- Players chip -->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/players_chip"
+            style="@style/Widget.App.InfoChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="5/8"
+            app:chipIcon="@drawable/ic_group_24"
+            app:chipIconTint="?attr/colorOnSurface"
+            app:layout_constraintTop_toBottomOf="@id/game_name"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="5/8" />
+
+        <!-- Type -->
+        <TextView
+            android:id="@+id/type_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/type_label"
+            android:textSize="13sp"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintTop_toTopOf="@id/players_chip"
+            app:layout_constraintStart_toEndOf="@id/players_chip"
+            tools:text="Type:" />
+
+        <TextView
+            android:id="@+id/type_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintBaseline_toBaselineOf="@id/type_label"
+            app:layout_constraintStart_toEndOf="@id/type_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Multiple Choice" />
+
+        <!-- Balance range -->
+        <TextView
+            android:id="@+id/balance_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/balance_label"
+            android:textSize="13sp"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintTop_toBottomOf="@id/players_chip"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Balance:" />
+
+        <TextView
+            android:id="@+id/balance_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/players_chip"
+            app:layout_constraintStart_toEndOf="@id/balance_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="1000 – 5000" />
+
+        <!-- Host -->
+        <TextView
+            android:id="@+id/host_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/host_label"
+            android:textSize="13sp"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintTop_toBottomOf="@id/balance_label"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Host:" />
+
+        <TextView
+            android:id="@+id/host_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/balance_label"
+            app:layout_constraintStart_toEndOf="@id/host_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="dadi_host_01" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

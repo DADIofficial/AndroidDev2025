@@ -19,4 +19,17 @@
 
     <string name="play">Play</string>
     <string name="block_image">Block image</string>
+
+    <string name="avatar">Avatar</string>
+    <string name="balance">Balance</string>
+    <string name="price_placeholder">Cost</string>
+
+    <string name="join">Join</string>
+    <string name="type_label">Type:</string>
+    <string name="host_label">Host:</string>
+    <string name="balance_label">Balance:</string>
+
+    <string name="nav_single">Single</string>
+    <string name="nav_multiple">Multiple</string>
+    <string name="nav_settings">Settings</string>
 </resources>
