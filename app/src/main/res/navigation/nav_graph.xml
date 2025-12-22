@@ -43,5 +43,19 @@
             app:destination="@id/mainFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/UserPageFragment"
+        android:name="com.example.androiddev2025.UserPageFrag"
+        android:label="user" >
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/AdminPageFragment"
+        android:name="com.example.androiddev2025.AdminPageFrag"
+        android:label="admin" >
+
+    </fragment>
+
 
 </navigation>

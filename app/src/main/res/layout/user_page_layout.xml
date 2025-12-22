@@ -6,8 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/UserInfoContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
@@ -18,38 +17,62 @@
 
 
         <LinearLayout
-            android:id="@+id/UserNameBlock"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:id="@+id/UserNameView"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="10dp">
+            android:paddingHorizontal="10dp">
 
             <TextView
                 android:id="@+id/UserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingEnd="10dp"
                 android:text="UserName"
                 android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/NameChangeButton"
-                android:layout_width="80dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:text="Change"
-                android:textSize="10sp"/>
+                android:textSize="9sp"/>
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/UserEmailBlock"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:id="@+id/UserNameEditBlock"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/UserNameEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="UserName"/>
+
+            <Button
+                android:id="@+id/NameEditButton"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textSize="9sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/UserEmailView"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
             android:layout_marginTop="8dp">
 
             <TextView
@@ -57,26 +80,51 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingEnd="10dp"
                 android:text="UserEmail"
                 android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/EmailChangeButton"
-                android:layout_width="80dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:text="Change"
-                android:textSize="10sp"/>
+                android:textSize="9sp"/>
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/UserPasswordBlock"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:id="@+id/UserEmailEditBlock"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/UserEmailEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="E-mail"
+                android:inputType="textEmailAddress"/>
+
+            <Button
+                android:id="@+id/EmailEditButton"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textSize="9sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/UserPasswordView"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
             android:layout_marginTop="8dp">
 
             <TextView
@@ -84,43 +132,60 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingEnd="10dp"
-                android:text="UserPassword"
+                android:text="••••••••"
                 android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/PasswordChangeButton"
-                android:layout_width="80dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:text="Change"
-                android:textSize="10sp"/>
+                android:textSize="9sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/UserPasswordEditBlock"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/UserPasswordEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="New password"
+                android:inputType="textEmailAddress"/>
+
+            <Button
+                android:id="@+id/PasswordEditButton"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textSize="9sp"/>
         </LinearLayout>
 
 
         <LinearLayout
             android:id="@+id/UserBalanceBlock"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
-            android:layout_marginTop="8dp">
+            android:paddingHorizontal="10dp"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/UserBalance"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingEnd="10dp"
-                android:text="UserBalance"
-                android:textSize="16sp"/>
-
-            <Button
-                android:id="@+id/BalanceChangeButton"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Change"
-                android:textSize="10sp"/>
+                android:text="Balance"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </LinearLayout>

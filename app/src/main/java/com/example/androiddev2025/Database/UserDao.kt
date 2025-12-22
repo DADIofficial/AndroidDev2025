@@ -26,7 +26,11 @@ interface UserDao {
     @Insert
     suspend fun insertAll(list: List<Users>)
 
-//    @Update
-//    suspend fun updateUser(user: Users)
+    @Query("SELECT * FROM user WHERE email = :email LIMIT 1")
+    suspend fun getUserByEmail(email: String): Users?
+
+
+    @Update
+    suspend fun updateUser(user: Users)
 
 }

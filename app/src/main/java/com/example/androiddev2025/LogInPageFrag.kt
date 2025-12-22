@@ -22,6 +22,11 @@ import com.example.androiddev2025.Database.Users
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.first
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import androidx.navigation.findNavController
+
 
 class LogInPageFrag : Fragment() {
 
@@ -62,69 +67,108 @@ class LogInPageFrag : Fragment() {
 
     }
 
+
     private fun login(email: String, password: String) {
-        val db = MainDB.getDB(requireContext()).userDao()
-        val db1 = MainDB.getDB(requireContext())
+        val dao = MainDB.getDB(requireContext()).userDao()
 
         CoroutineScope(Dispatchers.IO).launch {
+
+            var roomUser: Users? = null
 
             if (checkInet()) {
                 try {
                     val apiUsers = Retrofit.api.getUsers(5).users
-
-
-                    val dbList = apiUsers.map { user ->
-                        Users(
-                            id = null,
-                            name = "${user.firstName} ${user.lastName}",
-                            email = user.email,
-                            password = user.password,
-                            balance = 0f,
-                            admin = false
-                        )
+                    val apiUser = apiUsers.find {
+                        it.email == email && it.password == password
                     }
 
-                    db.deleteAllUsers()
-                    db.insertAll(dbList)
-
-                    val apiUser = apiUsers.find { it.email == email && it.password == password }
                     if (apiUser != null) {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(requireContext(), "вход  API", Toast.LENGTH_SHORT).show()
-                        }
-                        val list = db1.userDao().getAllUsers().first()
-                        list.forEach {
-                            Log.d("ROOM_TEST", "User: ${it.name}, Email: ${it.email}, Password: ${it.password}, Balance: ${it.balance}, Admin: ${it.admin}")
+
+                        roomUser = dao.getUserByEmail(email)
+
+                        if (roomUser == null) {
+                            roomUser = Users(
+                                id = null,
+                                name = "${apiUser.firstName} ${apiUser.lastName}",
+                                email = apiUser.email,
+                                password = apiUser.password,
+                                balance = 0f,
+                                admin = false
+                            )
+                            dao.insertUser(roomUser)
+                            roomUser = dao.getUserByEmail(email)
                         }
                     }
-
                 } catch (e: Exception) {
-                    Log.e("error", e.toString())
-
+                    Log.e("LOGIN", "API error", e)
                 }
             }
 
-            val localL = db.getAllUsersOnce()
-            val localU = localL.find { it.email == email && it.password == password }
-
-            if (localU != null) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "проверка Room", Toast.LENGTH_SHORT).show()
+            if (roomUser == null) {
+                roomUser = dao.getUserByEmail(email)
+                if (roomUser?.password != password) {
+                    roomUser = null
                 }
-            } else {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Неверный Email или Password", Toast.LENGTH_SHORT).show()
-                }
+            }
 
+            withContext(Dispatchers.Main) {
+                if (roomUser != null) {
+                    Session.login(
+                        email = roomUser.email,
+                        name = roomUser.name,
+                        admin = roomUser.admin,
+                        balance = roomUser.balance
+                    )
+
+                    (requireActivity() as MainActivity).updateToolbar()
+                    findNavController().navigate(R.id.mainFragment)
+
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Неверный Email или Password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
+
+
 
     private fun isValidEmail(text: String) = text.isNotEmpty()
     private fun isValidPassword(text: String) = text.isNotEmpty()
 
 
     private fun checkInet(): Boolean {
-        return true
+        val cm = requireContext()
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
+
+
+    private suspend fun syncUsersFromApi() {
+        val db = MainDB.getDB(requireContext()).userDao()
+        val apiUsers = Retrofit.api.getUsers(5).users
+
+        val dbList = apiUsers.map { user ->
+            Users(
+                id = null,
+                name = "${user.firstName} ${user.lastName}",
+                email = user.email,
+                password = user.password,
+                balance = 0f,
+                admin = false
+            )
+        }
+
+        db.deleteAllUsers()
+        db.insertAll(dbList)
+    }
+
+
 }
