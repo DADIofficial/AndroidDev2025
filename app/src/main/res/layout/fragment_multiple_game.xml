@@ -117,7 +117,8 @@
                     android:textColor="?attr/colorOnSurface"
                     app:layout_constraintStart_toEndOf="@id/balance_icon"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Balance" />
+                    tools:text="Balance"
+                    android:text="@string/balance"/>
 
                 <TextView
                     android:id="@+id/Balance_number"

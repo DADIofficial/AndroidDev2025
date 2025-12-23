@@ -1,60 +1,82 @@
 package com.example.androiddev2025.dadibranch.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.androiddev2025.Database.MainDB
 import com.example.androiddev2025.R
+import com.example.androiddev2025.Session
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class SingleGame : Fragment(R.layout.fragment_single_game) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SingleGame.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SingleGame : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var refreshJob: Job? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var userNameTv: TextView
+    private lateinit var userSubtitleTv: TextView
+    private lateinit var balanceNumberTv: TextView
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        userNameTv = view.findViewById(R.id.username)
+        userSubtitleTv = view.findViewById(R.id.username_subtitle)
+        balanceNumberTv = view.findViewById(R.id.Balance_number)
+
+        refreshHeaderFromDb()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshHeaderFromDb()
+    }
+
+    private fun refreshHeaderFromDb() {
+        val email = Session.email
+        if (email.isNullOrBlank()) {
+            userNameTv.text = "Guest"
+            userSubtitleTv.text = ""
+            balanceNumberTv.text = "0"
+            return
+        }
+
+        refreshJob?.cancel()
+        refreshJob = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val dao = MainDB.getDB(requireContext()).userDao()
+            val user = dao.getUserByEmail(email)
+
+            withContext(Dispatchers.Main) {
+                if (!isAdded) return@withContext
+
+                if (user == null) {
+                    Toast.makeText(requireContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show()
+                    return@withContext
+                }
+
+                userNameTv.text = user.name
+                userSubtitleTv.text = user.email
+                balanceNumberTv.text = formatBalance(user.balance)
+
+                Session.name = user.name
+                Session.balance = user.balance
+                Session.admin = user.admin
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_game, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListofGame.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SingleGame().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun formatBalance(balance: Float): String {
+        val rounded = balance.roundToInt()
+        return if (kotlin.math.abs(balance - rounded) < 0.0001f) {
+            rounded.toString()
+        } else {
+            balance.toString()
+        }
     }
 }
