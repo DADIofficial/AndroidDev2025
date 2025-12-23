@@ -137,7 +137,6 @@ class SettingsFragment : Fragment() {
         val addBalanceBtn = view.findViewById<MaterialButton>(R.id.AddBalanceButton)
         val logoutBtn = view.findViewById<MaterialButton>(R.id.LogoutButton)
 
-        var passwordCache = ""
         var currentEmail = emailToEditInitial
         val isEditingSelf = (currentEmail == Session.email)
 

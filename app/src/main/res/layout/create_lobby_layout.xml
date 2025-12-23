@@ -54,7 +54,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Lobby name -->
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_lobby_name"
                 android:layout_width="0dp"
