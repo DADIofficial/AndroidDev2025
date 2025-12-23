@@ -1,60 +1,80 @@
 package com.example.androiddev2025.dadibranch.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.androiddev2025.Database.MainDB
 import com.example.androiddev2025.R
+import com.example.androiddev2025.Session
+import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SingleGame.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SingleGame : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SingleGame : Fragment(R.layout.single_game_layout) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val balanceText = view.findViewById<TextView>(R.id.balanceText)
+        val betInput = view.findViewById<EditText>(R.id.betInput)
+        val playButton = view.findViewById<MaterialButton>(R.id.playButton)
+        val resultText = view.findViewById<TextView>(R.id.resultText)
+
+        val userId = Session.userId ?: return
+        val userDao = MainDB.getDB(requireContext()).userDao()
+
+        fun updateBalanceUI() {
+            balanceText.text = "Balance: ${Session.balance}"
         }
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_single_game, container, false)
-    }
+        updateBalanceUI()
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListofGame.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SingleGame().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        playButton.setOnClickListener {
+
+            val bet = betInput.text.toString().toIntOrNull()
+
+            if (bet == null || bet <= 0) {
+                Toast.makeText(requireContext(), "Invalid bet", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            if (bet > Session.balance) {
+                Toast.makeText(requireContext(), "Not enough balance", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val win = Random.nextBoolean()
+
+            lifecycleScope.launch {
+
+                val newBalance = if (win) {
+                    Session.balance + bet*2f
+                } else {
+                    Session.balance - bet
+                }
+
+                Session.balance = newBalance
+
+                withContext(Dispatchers.IO) {
+                    val user = userDao.getUserById(userId) ?: return@withContext
+                    userDao.updateUser(
+                        user.copy(balance = newBalance)
+                    )
+                }
+
+                updateBalanceUI()
+
+                resultText.text =
+                    if (win) "You won! +$bet*2f"
+                    else "You lost! -$bet"
+            }
+        }
     }
 }

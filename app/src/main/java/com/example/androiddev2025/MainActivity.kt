@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
             if (Session.isLoggedIn()) switchToMainGraph() else switchToAuthGraph()
 
-            // клики хедера (будут работать только в auth, т.к. в main он скрыт)
             findViewById<TextView>(R.id.LogIn).setOnClickListener {
                 if (!Session.isLoggedIn()) navController.navigate(R.id.loginFragment)
             }
