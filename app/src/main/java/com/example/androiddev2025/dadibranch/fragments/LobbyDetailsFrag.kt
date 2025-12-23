@@ -49,7 +49,6 @@ class LobbyDetailsFrag : Fragment(R.layout.lobby_details_layout) {
             when {
                 currentUserId == lobbyHostId -> {
                     joinButton.visibility = View.GONE
-                    quitButton.visibility = View.GONE
                 }
 
                 lobbyPlayersIds.contains(currentUserId) -> {
@@ -129,6 +128,16 @@ class LobbyDetailsFrag : Fragment(R.layout.lobby_details_layout) {
                     gameDb.lobbyDao().getById(lobbyId)
                 }
 
+                if (currentUserId == freshLobby.hostId) {
+
+                    withContext(Dispatchers.IO) {
+                        gameDb.lobbyDao().deleteById(lobbyId)
+                    }
+
+                    findNavController().navigate(R.id.multipleGameFragment)
+                    return@launch
+                }
+
                 val freshPlayersIds = freshLobby.playersIds
                     .split(",")
                     .filter { it.isNotBlank() }
@@ -154,6 +163,7 @@ class LobbyDetailsFrag : Fragment(R.layout.lobby_details_layout) {
                 renderLobby(updatedIds, freshLobby.hostId, freshLobby.maxPlayers)
             }
         }
+
 
         returnButton.setOnClickListener {
             findNavController().navigate(R.id.multipleGameFragment)

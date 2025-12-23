@@ -18,5 +18,8 @@ interface LobbyDao {
 
     @Query("UPDATE lobby SET playersIds = :players WHERE id = :id")
     suspend fun updatePlayers(id: Int, players: String)
+
+    @Query("DELETE FROM Lobby WHERE id = :id")
+    suspend fun deleteById(id: Int)
 }
 
