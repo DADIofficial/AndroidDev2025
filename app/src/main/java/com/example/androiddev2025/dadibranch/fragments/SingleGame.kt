@@ -2,6 +2,7 @@ package com.example.androiddev2025.dadibranch.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -9,74 +10,71 @@ import androidx.lifecycle.lifecycleScope
 import com.example.androiddev2025.Database.MainDB
 import com.example.androiddev2025.R
 import com.example.androiddev2025.Session
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.roundToInt
+import kotlin.random.Random
 
-class SingleGame : Fragment(R.layout.fragment_single_game) {
 
-    private var refreshJob: Job? = null
-
-    private lateinit var userNameTv: TextView
-    private lateinit var userSubtitleTv: TextView
-    private lateinit var balanceNumberTv: TextView
+class SingleGame : Fragment(R.layout.single_game_layout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userNameTv = view.findViewById(R.id.username)
-        userSubtitleTv = view.findViewById(R.id.username_subtitle)
-        balanceNumberTv = view.findViewById(R.id.Balance_number)
+        val balanceText = view.findViewById<TextView>(R.id.balanceText)
+        val betInput = view.findViewById<EditText>(R.id.betInput)
+        val playButton = view.findViewById<MaterialButton>(R.id.playButton)
+        val resultText = view.findViewById<TextView>(R.id.resultText)
 
-        refreshHeaderFromDb()
-    }
+        val userId = Session.userId ?: return
+        val userDao = MainDB.getDB(requireContext()).userDao()
 
-    override fun onResume() {
-        super.onResume()
-        refreshHeaderFromDb()
-    }
-
-    private fun refreshHeaderFromDb() {
-        val email = Session.email
-        if (email.isNullOrBlank()) {
-            userNameTv.text = "Guest"
-            userSubtitleTv.text = ""
-            balanceNumberTv.text = "0"
-            return
+        fun updateBalanceUI() {
+            balanceText.text = "Balance: ${Session.balance}"
         }
 
-        refreshJob?.cancel()
-        refreshJob = viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            val dao = MainDB.getDB(requireContext()).userDao()
-            val user = dao.getUserByEmail(email)
+        updateBalanceUI()
 
-            withContext(Dispatchers.Main) {
-                if (!isAdded) return@withContext
+        playButton.setOnClickListener {
 
-                if (user == null) {
-                    Toast.makeText(requireContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show()
-                    return@withContext
+            val bet = betInput.text.toString().toIntOrNull()
+
+            if (bet == null || bet <= 0) {
+                Toast.makeText(requireContext(), "Invalid bet", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (bet > Session.balance) {
+                Toast.makeText(requireContext(), "Not enough balance", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val win = Random.nextBoolean()
+
+            lifecycleScope.launch {
+
+                val newBalance = if (win) {
+                    Session.balance + bet*2f
+                } else {
+                    Session.balance - bet
                 }
 
-                userNameTv.text = user.name
-                userSubtitleTv.text = user.email
-                balanceNumberTv.text = formatBalance(user.balance)
+                Session.balance = newBalance
 
-                Session.name = user.name
-                Session.balance = user.balance
-                Session.admin = user.admin
+                withContext(Dispatchers.IO) {
+                    val user = userDao.getUserById(userId) ?: return@withContext
+                    userDao.updateUser(
+                        user.copy(balance = newBalance)
+                    )
+                }
+
+                updateBalanceUI()
+
+                resultText.text =
+                    if (win) "You won! +$bet*2f"
+                    else "You lost! -$bet"
             }
-        }
-    }
-
-    private fun formatBalance(balance: Float): String {
-        val rounded = balance.roundToInt()
-        return if (kotlin.math.abs(balance - rounded) < 0.0001f) {
-            rounded.toString()
-        } else {
-            balance.toString()
         }
     }
 }

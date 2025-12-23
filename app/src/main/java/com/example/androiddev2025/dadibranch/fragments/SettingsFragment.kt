@@ -99,6 +99,23 @@ class SettingsFragment : Fragment() {
         val userPasswordTv = view.findViewById<TextView>(R.id.UserPassword)
         val userBalanceTv = view.findViewById<TextView>(R.id.UserBalance)
 
+        var passwordCache = ""
+
+        val userId = Session.userId ?: return
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val dao = MainDB.getDB(requireContext()).userDao()
+            val user = dao.getUserById(userId) ?: return@launch
+
+            withContext(Dispatchers.Main) {
+                userNameTv.text = user.name
+                userEmailTv.text = user.email
+                userPasswordTv.text = "••••••••"
+                userBalanceTv.text = "Balance: ${user.balance}"
+                passwordCache = user.password
+            }
+        }
+
         val nameView = view.findViewById<LinearLayout>(R.id.UserNameView)
         val nameEditBlock = view.findViewById<LinearLayout>(R.id.UserNameEditBlock)
         val nameChangeBTN = view.findViewById<Button>(R.id.NameChangeButton)
@@ -164,14 +181,13 @@ class SettingsFragment : Fragment() {
             passwordEdit.setText(passwordCache)
         }
 
-
         userNameEditBTN.setOnClickListener {
             val newName = userNameEdit.text.toString().trim()
             if (newName.isEmpty()) return@setOnClickListener
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val dao = MainDB.getDB(requireContext()).userDao()
-                val user = dao.getUserByEmail(currentEmail) ?: return@launch
+                val user = dao.getUserById(userId) ?: return@launch
                 dao.updateUser(user.copy(name = newName))
 
                 withContext(Dispatchers.Main) {
@@ -179,10 +195,9 @@ class SettingsFragment : Fragment() {
                     nameEditBlock.visibility = View.GONE
                     nameView.visibility = View.VISIBLE
 
-                    if (isEditingSelf) {
-                        Session.name = newName
-                        (requireActivity() as? MainActivity)?.updateToolbar()
-                    }
+                    Session.name = newName
+                    (requireActivity() as? MainActivity)?.updateToolbar()
+
                     Toast.makeText(requireContext(), "Имя обновлено", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -195,7 +210,7 @@ class SettingsFragment : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val dao = MainDB.getDB(requireContext()).userDao()
-                val user = dao.getUserByEmail(currentEmail) ?: return@launch
+                val user = dao.getUserById(userId) ?: return@launch
                 dao.updateUser(user.copy(email = newEmail))
 
                 withContext(Dispatchers.Main) {
@@ -203,13 +218,7 @@ class SettingsFragment : Fragment() {
                     emailEditBlock.visibility = View.GONE
                     emailView.visibility = View.VISIBLE
 
-
-                    currentEmail = newEmail
-
-                    if (isEditingSelf) {
-                        Session.email = newEmail
-                        (requireActivity() as? MainActivity)?.updateToolbar()
-                    }
+                    Session.email = newEmail
                     Toast.makeText(requireContext(), "Почта обновлена", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -221,7 +230,7 @@ class SettingsFragment : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val dao = MainDB.getDB(requireContext()).userDao()
-                val user = dao.getUserByEmail(currentEmail) ?: return@launch
+                val user = dao.getUserById(userId) ?: return@launch
                 dao.updateUser(user.copy(password = newPassword))
 
                 withContext(Dispatchers.Main) {
@@ -238,14 +247,14 @@ class SettingsFragment : Fragment() {
         addBalanceBtn.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val dao = MainDB.getDB(requireContext()).userDao()
-                val user = dao.getUserByEmail(currentEmail) ?: return@launch
-                val newBalance = user.balance + 100
+                val user = dao.getUserById(userId) ?: return@launch
+                val newBalance = user.balance + 10
                 dao.updateUser(user.copy(balance = newBalance))
 
                 withContext(Dispatchers.Main) {
+                    Session.balance = newBalance
                     userBalanceTv.text = "Balance: $newBalance"
-                    if (isEditingSelf) Session.balance = newBalance
-                    Toast.makeText(requireContext(), "+100 added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "+10 added", Toast.LENGTH_SHORT).show()
                 }
             }
         }
