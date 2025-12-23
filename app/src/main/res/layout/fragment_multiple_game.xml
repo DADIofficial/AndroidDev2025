@@ -80,7 +80,7 @@
                     app:layout_constraintStart_toEndOf="@id/username_avatar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/username"
-                    tools:text="Level 5" />
+                    tools:text="email" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

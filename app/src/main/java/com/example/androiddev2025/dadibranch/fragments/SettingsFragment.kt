@@ -120,18 +120,15 @@ class SettingsFragment : Fragment() {
         val addBalanceBtn = view.findViewById<MaterialButton>(R.id.AddBalanceButton)
         val logoutBtn = view.findViewById<MaterialButton>(R.id.LogoutButton)
 
-        // State
         var passwordCache = ""
         var currentEmail = emailToEditInitial
         val isEditingSelf = (currentEmail == Session.email)
 
-        // Если это админ редактирует чужого — можно скрыть кнопки self-действий (по желанию)
         if (!isEditingSelf) {
-            // можешь оставить видимыми, если нужно админское управление
-            logoutBtn.visibility = View.GONE
+             logoutBtn.visibility = View.GONE
         }
 
-        // Load user data
+
         lifecycleScope.launch(Dispatchers.IO) {
             val dao = MainDB.getDB(requireContext()).userDao()
             val user = dao.getUserByEmail(currentEmail)
@@ -149,7 +146,6 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        // Open edit blocks
         nameChangeBTN.setOnClickListener {
             nameView.visibility = View.GONE
             nameEditBlock.visibility = View.VISIBLE
@@ -168,7 +164,7 @@ class SettingsFragment : Fragment() {
             passwordEdit.setText(passwordCache)
         }
 
-        // Save name
+
         userNameEditBTN.setOnClickListener {
             val newName = userNameEdit.text.toString().trim()
             if (newName.isEmpty()) return@setOnClickListener
@@ -192,7 +188,7 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        // Save email
+
         emailEditBTN.setOnClickListener {
             val newEmail = emailEdit.text.toString().trim()
             if (newEmail.isEmpty()) return@setOnClickListener
@@ -207,7 +203,7 @@ class SettingsFragment : Fragment() {
                     emailEditBlock.visibility = View.GONE
                     emailView.visibility = View.VISIBLE
 
-                    // обновляем текущий email, чтобы дальше всё работало
+
                     currentEmail = newEmail
 
                     if (isEditingSelf) {
@@ -219,7 +215,6 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        // Save password
         passwordEditBTN.setOnClickListener {
             val newPassword = passwordEdit.text.toString().trim()
             if (newPassword.isEmpty()) return@setOnClickListener
@@ -239,7 +234,7 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        // Add balance (+100)
+
         addBalanceBtn.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val dao = MainDB.getDB(requireContext()).userDao()
@@ -255,7 +250,6 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        // Logout (только когда редактируем себя)
         logoutBtn.setOnClickListener {
             Session.logout()
             (requireActivity() as MainActivity).switchToAuthGraph()
