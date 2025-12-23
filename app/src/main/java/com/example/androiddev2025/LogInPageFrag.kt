@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.first
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 
 
@@ -69,66 +70,73 @@ class LogInPageFrag : Fragment() {
 
 
     private fun login(email: String, password: String) {
+
         val dao = MainDB.getDB(requireContext()).userDao()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
 
-            var roomUser: Users? = null
+            val roomUser = withContext(Dispatchers.IO) {
 
-            if (checkInet()) {
-                try {
-                    val apiUsers = Retrofit.api.getUsers(5).users
-                    val apiUser = apiUsers.find {
-                        it.email == email && it.password == password
-                    }
+                var user: Users? = null
 
-                    if (apiUser != null) {
-
-                        roomUser = dao.getUserByEmail(email)
-
-                        if (roomUser == null) {
-                            roomUser = Users(
-                                id = null,
-                                name = "${apiUser.firstName} ${apiUser.lastName}",
-                                email = apiUser.email,
-                                password = apiUser.password,
-                                balance = 0f,
-                                admin = false
-                            )
-                            dao.insertUser(roomUser)
-                            roomUser = dao.getUserByEmail(email)
+                if (checkInet()) {
+                    try {
+                        val apiUsers = Retrofit.api.getUsers(5).users
+                        val apiUser = apiUsers.find {
+                            it.email == email && it.password == password
                         }
+
+                        if (apiUser != null) {
+                            user = dao.getUserByEmail(email)
+
+                            if (user == null) {
+                                user = Users(
+                                    id = null,
+                                    name = "${apiUser.firstName} ${apiUser.lastName}",
+                                    email = apiUser.email,
+                                    password = apiUser.password,
+                                    balance = 0f,
+                                    admin = false
+                                )
+                                dao.insertUser(user)
+                                user = dao.getUserByEmail(email)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("LOGIN", "API error", e)
                     }
-                } catch (e: Exception) {
-                    Log.e("LOGIN", "API error", e)
                 }
+
+                if (user == null) {
+                    user = dao.getUserByEmail(email)
+                    if (user?.password != password) {
+                        user = null
+                    }
+                }
+
+                user
             }
 
-            if (roomUser == null) {
-                roomUser = dao.getUserByEmail(email)
-                if (roomUser?.password != password) {
-                    roomUser = null
-                }
-            }
+            // ⛑ Fragment мог быть уничтожен
+            if (!isAdded) return@launch
 
-            withContext(Dispatchers.Main) {
-                if (roomUser != null) {
-                    Session.login(
-                        email = roomUser.email,
-                        name = roomUser.name,
-                        admin = roomUser.admin,
-                        balance = roomUser.balance
-                    )
+            if (roomUser != null) {
+                Session.login(
+                    userId = roomUser.id!!,
+                    email = roomUser.email,
+                    name = roomUser.name,
+                    admin = roomUser.admin,
+                    balance = roomUser.balance
+                )
 
-                    (requireActivity() as MainActivity).switchToMainGraph()
+                (requireActivity() as MainActivity).switchToMainGraph()
 
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Неверный Email или Password",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            } else {
+                Toast.makeText(
+                    context,
+                    "Неверный Email или Password",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
