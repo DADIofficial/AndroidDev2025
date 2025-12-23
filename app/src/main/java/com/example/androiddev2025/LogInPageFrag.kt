@@ -120,8 +120,7 @@ class LogInPageFrag : Fragment() {
                         balance = roomUser.balance
                     )
 
-                    (requireActivity() as MainActivity).updateToolbar()
-                    findNavController().navigate(R.id.mainFragment)
+                    (requireActivity() as MainActivity).switchToMainGraph()
 
                 } else {
                     Toast.makeText(

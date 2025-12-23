@@ -17,6 +17,17 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.androiddev2025.dadibranch.fragments.SettingsFragment"
-        android:label="Settings" />
+        android:label="Settings">
+
+        <argument
+            android:name="user_email"
+            app:argType="string"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AdminPageFragment"
+        android:name="com.example.androiddev2025.AdminPageFrag"
+        android:label="Admin" />
 
 </navigation>

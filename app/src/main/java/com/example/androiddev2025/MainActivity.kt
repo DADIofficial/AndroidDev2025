@@ -1,93 +1,80 @@
 package com.example.androiddev2025
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.findNavController
-import android.content.Context
-import android.util.Log
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.ui.setupWithNavController
+
 
 
 class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity_layout)
+        private lateinit var navController: NavController
+        private lateinit var bottomNav: BottomNavigationView
+        private lateinit var toolBar: View
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.main_activity_layout)
 
-        val navController = navHostFragment.navController
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navController = navHostFragment.navController
 
-        val MainPage = findViewById<TextView>(R.id.Mainlogo)
-        val LoginPage = findViewById<TextView>(R.id.LogIn)
-        val RegistPage = findViewById<TextView>(R.id.Registr)
+            bottomNav = findViewById(R.id.bottomNav)
+            toolBar = findViewById(R.id.toolBar)
 
-        val logout = findViewById<TextView>(R.id.LogOut)
+            if (Session.isLoggedIn()) switchToMainGraph() else switchToAuthGraph()
 
-        MainPage.setOnClickListener {
-            navController.navigate(R.id.mainFragment)
-        }
-
-        LoginPage.setOnClickListener {
-            navController.navigate(R.id.loginFragment)
-        }
-
-        RegistPage.setOnClickListener {
-            navController.navigate(R.id.registrFragment)
-        }
-
-        val user = findViewById<TextView>(R.id.User)
-
-
-        user.setOnClickListener {
-            if (Session.admin) {
-                navController.navigate(R.id.AdminPageFragment)
-            } else {
-                navController.navigate(R.id.UserPageFragment)
+            // клики хедера (будут работать только в auth, т.к. в main он скрыт)
+            findViewById<TextView>(R.id.LogIn).setOnClickListener {
+                if (!Session.isLoggedIn()) navController.navigate(R.id.loginFragment)
+            }
+            findViewById<TextView>(R.id.Registr).setOnClickListener {
+                if (!Session.isLoggedIn()) navController.navigate(R.id.registrFragment)
             }
         }
 
-        logout.setOnClickListener {
-            Session.logout()
+        fun switchToAuthGraph() {
+            navController.setGraph(R.navigation.nav_graph)
+
+            toolBar.visibility = View.VISIBLE
+            bottomNav.visibility = View.GONE
+
             updateToolbar()
-            navController.navigate(R.id.mainFragment)
         }
 
+        fun switchToMainGraph() {
+            navController.setGraph(R.navigation.nav_graph_main)
 
+            toolBar.visibility = View.GONE
+            bottomNav.visibility = View.VISIBLE
 
-    }
-
-    fun updateToolbar() {
-        val LoginPage = findViewById<TextView>(R.id.LogIn)
-        val RegistPage = findViewById<TextView>(R.id.Registr)
-        val user = findViewById<TextView>(R.id.User)
-        val logout = findViewById<TextView>(R.id.LogOut)
-
-
-        if (Session.isLoggedIn()) {
-            LoginPage.visibility = View.GONE
-            RegistPage.visibility = View.GONE
-
-            user.visibility = View.VISIBLE
-            logout.visibility = View.VISIBLE
-            user.text = Session.name
-        } else {
-            LoginPage.visibility = View.VISIBLE
-            RegistPage.visibility = View.VISIBLE
-            user.visibility = View.GONE
-            logout.visibility = View.GONE
+            bottomNav.setupWithNavController(navController)
         }
 
+        fun updateToolbar() {
+            val login = findViewById<TextView>(R.id.LogIn)
+            val registr = findViewById<TextView>(R.id.Registr)
+            val user = findViewById<TextView>(R.id.User)
+            val logout = findViewById<TextView>(R.id.LogOut)
+
+            if (Session.isLoggedIn()) {
+                login.visibility = View.GONE
+                registr.visibility = View.GONE
+                user.visibility = View.VISIBLE
+                logout.visibility = View.VISIBLE
+                user.text = Session.name ?: "User"
+            } else {
+                login.visibility = View.VISIBLE
+                registr.visibility = View.VISIBLE
+                user.visibility = View.GONE
+                logout.visibility = View.GONE
+            }
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Session.logout()
-    }
-
-
-}

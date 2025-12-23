@@ -2,86 +2,124 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- HEADER (показываем только в AUTH графе) -->
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/toolBar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/card_stroke"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/Mainlogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="MainLogo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp">
 
-        <TextView
-            android:id="@+id/LogIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Log-in"
-            android:visibility="visible"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toStartOf="@id/Registr"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <TextView
+                android:id="@+id/Mainlogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DadAnderson"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/Registr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registr"
-            android:visibility="visible"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <LinearLayout
+                android:id="@+id/actions_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginStart="28dp"
+                android:paddingStart="24dp"
+                app:layout_constraintStart_toEndOf="@id/Mainlogo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:id="@+id/User"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="User"
-            android:visibility="invisible"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/LogOut"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/LogIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.HeaderActionSecondary"
+                    android:text="Log-in"
+                    android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/LogOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:visibility="invisible"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/Registr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.HeaderActionPrimary"
+                    android:layout_marginStart="10dp"
+                    android:text="Register"
+                    android:visibility="visible" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/User"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.HeaderUserPill"
+                    android:layout_marginStart="10dp"
+                    android:text="User"
+                    android:visibility="invisible" />
+
+                <!-- по умолчанию скрыт -->
+                <TextView
+                    android:id="@+id/LogOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.App.HeaderActionSecondary"
+                    android:layout_marginStart="10dp"
+                    android:text="Logout"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 
+    <!-- NAV HOST -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:navGraph="@navigation/nav_graph"
         app:defaultNavHost="true"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- BOTTOM NAV (показываем только в MAIN графе) -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:menu="@menu/bottom_menu"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

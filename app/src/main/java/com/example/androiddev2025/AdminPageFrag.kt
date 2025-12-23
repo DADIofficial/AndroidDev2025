@@ -52,7 +52,7 @@ class AdminPageFrag: Fragment() {
         val bundle = Bundle().apply { putString("user_email", user.email) }
 
         val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-        navController.navigate(R.id.UserPageFragment, bundle)
+        navController.navigate(R.id.settingsFragment, bundle)
     }
 
 }
